@@ -185,11 +185,11 @@ for line in tabLines:
             output = 'Check the tab on line ' + str(lineNumber) + '\n' + '\n'
         tabParts = tab.split(".")
         string = "string" + str(tabParts[0])
-        print(string)
+        # print(string)
         fret = tabParts[1]
-        print(fret)
+        # print(fret)
         duration = tabParts[2].replace('*', '.')
-        print(duration)
+        # print(duration)
         if string == "string0": # Check if note is a rest
             output = output + 'r' + duration + ' '
         else:
@@ -203,6 +203,32 @@ print(output)
 
 print('This output is also saved in notes.txt')
 
-# Print notes to file
+# Print notes to text file
 with open('notes.txt', 'w') as f:
     f.write(output)
+
+# Print notes to lilypond file
+match instrument:
+    case 'Bass':
+        lilyHead = r"""\header {title = "Tab2Note Output"}
+part = {
+  \clef bass
+  """
+    case 'Guitar':
+        lilyHead = r"""\header {title = "Tab2Note Output"}
+part = {
+"""
+
+lilyFoot = r"""\bar "|."
+}
+
+\score {
+    \new Staff \part 
+    \layout { }
+    \midi { }
+}"""
+
+with open('output.ly', 'w') as f:
+    f.write(lilyHead)
+    f.write(output)
+    f.write(lilyFoot)
